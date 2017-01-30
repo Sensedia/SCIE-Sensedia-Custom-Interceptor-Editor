@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="SENSEIDEJS">
+  <head>
+  <title>SENSEDIA - SCIE</title>
+  <link rel=icon href=/image/favicons.png>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/app.css">
+  <link rel="stylesheet" type="text/css" href="css/theme.css">
+  </head>
+  <body>
+
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header navbar-left">
+          <a class="navbar-brand logo" ng-href="/#/sourcecode"><img src="image/logo.png"></a>
+        </div>
+
+      </div>
+    </nav>
+
+    <section ng-view></section>
+
+    <section ng-include="'debbugerModal.html'"></section>
+    <div class="panel-footer">
+      <a ng-href="/#/sourcecode" class="btn btn-primary btn-lg  item">Editor</a>
+      <a class="btn btn-info btn-lg item" data-toggle="modal" data-target="#myModal">Gerar Debugger </a>
+      <a ng-href="/#/documentation" class="btn btn-success btn-lg  item">Documentação</a>
+      <a ng-href="/#/errors" class="btn btn-danger btn-lg  item">Erros</a>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="http://localhost:4555/socket.io/socket.io.js"></script>
+    <script src="lib/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lib/ace/src/ext-language_tools.js"></script>
+    <script type="text/javascript" src="lib/angular/angular.min.js"></script>
+    <script src="lib/angular-websocket/dist/angular-websocket.js"></script>
+    <script type="text/javascript" src="lib/angular-ui-bootstrap/src/modal/modal.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-sanitize.js"></script>
+    <script type="text/javascript" src="lib/angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script type="text/javascript" src="lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script type="text/javascript" src="lib/angular-route/angular-route.min.js"></script>
+    <script type="text/javascript" src="lib/ng-file-upload/ng-file-upload.min.js"></script>
+    <script type="text/javascript" src="lib/angular-cookies/angular-cookies.min.js"></script>
+    <script type="text/javascript" src="lib/ng-file-upload/ng-file-upload.min.js"></script>
+    <script type="text/javascript" src="lib/angular-mass-autocomplete/massautocomplete.js"></script>
+    <script type="text/javascript" src="lib/angular-wizard/dist/angular-wizard.min.js"></script>
+    <script type="text/javascript" src="lib/angular-spinners/dist/angular-spinners.min.js"></script>
+    <script type="text/javascript" src="config.js"></script>
+    <script type="text/javascript" src="controller/SourcecodeController.js"></script>
+    <script type="text/javascript" src="controller/DebuggerController.js"></script>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+<div class="panel panel-default">
+  <div class="panel-heading"><h3>Como contornar alguns erros</h3></div>
+    <div class="panel-body">
+
+
+      <br/>
+      <div>
+          <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_1">Compatibilidade String java e javascript</button>
+          <div id="e_1" class="collapse">
+      <pre><code>
+//Ao tentar utilizar o código a seguir você receberia o seguinte erro: "TypeError: Cannot find function getQueryParam in object com.sensedia.interceptor.externaljar.dto.ApiCallData"
+
+
+try{
+    var body = JSON.parse($call.request.getBody().getString("utf-8"));
+    var json = {};
+    json.nome = $call.getQueryParam("nome");
+    JSON.stringify(json);
+}catch(e){
+  $call.tracer.trace(e);
+}
+
+//Pra correção desse problema basta fazer o seguinte:
+try{
+    var body = JSON.parse($call.request.getBody().getString("utf-8"));
+    var json = {};
+    json.nome = <b>''</b> + $call.getQueryParam("nome");
+    JSON.stringify(json);
+}catch(e){
+  $call.tracer.trace(e);
+}
+      </code></pre>
+          </div>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>

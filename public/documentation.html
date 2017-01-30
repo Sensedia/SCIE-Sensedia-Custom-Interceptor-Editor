@@ -1,0 +1,316 @@
+
+<div class="panel panel-default">
+  <div class="panel-heading"><h3>Documentação</h3></div>
+  <div class="panel-body">
+
+    <div>
+      <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_1">Adicionar header fixo (Content-Type)</button>
+      <div id="e_1" class="collapse">
+      <pre>
+
+  if ( $call.request.getHeader( "Content-Type" ) == null )
+      	$call.request.setHeader( "Content-Type", "application/json" );
+      </code>
+      </div>
+    </div>
+    <br/>
+    <div>
+      <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_2">Abortar requests</button>
+      <div id="e_2" class="collapse">
+      <pre>var json = {};
+  json.mensagem="Mensagem de erro";
+
+  $call.stopFlow = true;
+  $call.decision.setAccept( false );
+
+  $call.response = new com.sensedia.apigateway.services.ApiResponse();
+  $call.response.getBody().setString(JSON.stringify(json), "utf-8");
+  $call.response.setHeader("content-type", "application/json");
+  $call.response.setStatus( 400 );</pre>
+      </div>
+    </div>
+      <br/>
+    <div>
+      <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_3">Adicionar query-params de paginação quando ausente</button>
+      <div id="e_3" class="collapse">
+  <pre><code>
+if ( ! $request.getQueryParam("page") )
+	$request.setQueryParam("page", "0");
+
+if ( ! $request.getQueryParam("page_size") )
+	$request.setQueryParam("page_size", "20");
+
+/*Também queremos nos proteger contra chamadas que especifiquem parâmetros de paginação fora do aceitável, então continuamos o script acima com:*/
+
+var page = parseInt($request.getQueryParam("page"));
+if (page > 100 || page < 0)
+	$request.setQueryParam("page", 0);
+
+var pageSize = parseInt($request.getQueryParam("page_size"));
+if (pageSize > 100 || pageSize < 1)
+	$request.setQueryParam("page_size", 20);
+  </code></pre>
+      </div>
+    </div>
+  <br/>
+    <div>
+      <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_4">Renomear um campo no corpo do request</button>
+      <div id="e_4" class="collapse">
+  <pre><code>
+if ( ! $request.getQueryParam("page") )
+  $request.setQueryParam("page", "0");
+
+if ( ! $request.getQueryParam("page_size") )
+  $request.setQueryParam("page_size", "20");
+
+/*Também queremos nos proteger contra chamadas que especifiquem parâmetros de paginação fora do aceitável, então continuamos o script acima com:*/
+
+var page = parseInt($request.getQueryParam("page"));
+if (page > 100 || page < 0)
+  $request.setQueryParam("page", 0);
+
+var pageSize = parseInt($request.getQueryParam("page_size"));
+if (pageSize > 100 || pageSize < 1)
+  $request.setQueryParam("page_size", 20);
+  </code></pre>
+      </div>
+    </div>
+
+    <br/>
+    <div>
+      <div>
+        <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_5">Obter token de uma chamada</button>
+        <div id="e_5" class="collapse">
+    <pre><code>
+var accessToken = $call.accessToken;
+var token = accessToken.extraInfo.get("access_token"));
+    </code></pre>
+        </div>
+      </div>
+
+  </div>
+
+  <br/>
+  <div>
+    <div>
+      <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_6">Alterar rota</button>
+      <div id="e_6" class="collapse">
+  <pre><code>
+$call.request.setHeader("Content-Type", "application/json");
+var url = "www.url.com/teste";
+
+$call.destinationUri = new java.net.URI(url);
+$call.request.setHeader('Host', $call.destinationUri.getHost());
+  </code></pre>
+      </div>
+    </div>
+
+</div>
+
+<br/>
+<div>
+    <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_7">Converter corpo do request de texto para JSON</button>
+    <div id="e_7" class="collapse">
+<pre><code>
+var text = $call.request.getBody().getString("utf-8");
+var newBody = "{";
+text.split("\n").forEach(function(line) {
+    var pieces = line.split(":");
+    if (pieces[0].trim() == 'invoice' || pieces[0].trim() == 'tax' || pieces[0].trim() == 'total')
+        newBody += '"' + pieces[0].trim() + '"' + ':' + pieces[1].trim() + ',';
+    else
+        newBody += '"' + pieces[0].trim() + '"' + ':' + '"' + pieces[1].trim() + '",';
+});
+if ( newBody.length > 1 )
+	newBody = newBody.substring(0,newBody.length -1);
+newBody += '}';
+
+// Seta o novo corpo do request
+$call.request.getBody().setString(newBody, "utf-8");
+$call.request.setHeader("Content-Type", "application/json");
+</code></pre>
+    </div>
+</div>
+
+<br/>
+<div>
+    <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_8">Tratar exceções do back-end</button>
+    <div id="e_8" class="collapse">
+<pre><code>
+if($call.response.getStatus() == 401){
+	var errorBody = $call.response.getBody().getString("utf-8");
+	var jsonError = {};
+	jsonError.status = String($call.response.getStatus());
+	jsonError.message = String(errorBody);
+	$call.response.getBody().setString(JSON.stringify(jsonError), "utf-8");
+	$call.response.setHeader("Content-Type", "application/json");
+}
+</code></pre>
+    </div>
+</div>
+
+<br/>
+<div>
+    <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_9">Alterar http método de uma chamada</button>
+    <div id="e_9" class="collapse">
+<pre><code>
+if ( $call.request.getMethod() == "PUT" )
+{
+	$call.request.setMethod( "GET" );
+}
+else if ( $call.request.getMethod() == "POST" )
+{
+	$call.request.setMethod( "PUT" );
+}
+else if ( $call.request.getMethod() == "GET" )
+{
+	$call.request.setMethod( "PATCH" );
+}
+</code></pre>
+    </div>
+</div>
+
+<br/>
+<div>
+    <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_10">Pegar um parâmetro da URI e colocar no corpo da request</button>
+    <div id="e_10" class="collapse">
+<pre><code>
+if ( $call.request.getQueryParam("userId") != null )
+{
+	var json = JSON.parse($call.request.getBody().getString("utf-8"));
+	json["userId"] = String($call.request.getQueryParam("userId"));
+
+	$call.request.getBody().setString(JSON.stringify(json), "utf-8");
+	$call.request.setHeader("Content-Type", "application/json");
+}
+</code></pre>
+    </div>
+</div>
+
+<br/>
+<div>
+    <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_11">Executar outros serviços durante a transformação</button>
+    <div id="e_11" class="collapse">
+<pre><code>
+if($http.get("http://sensedia.com").status == 200)
+{
+	$http.get("http://sensedia.com/blog")
+}
+
+if($http.get("http://sensedia.com").status == 200)
+{
+	var header = { 'Content-Type' : 'application/json' }
+	var body = { "hello": "world" }
+	$http.post("http://www.mocky.io/v2/551018c499386d1a0b53b04b", header, body)
+}
+</code></pre>
+    </div>
+</div>
+
+<br/>
+<div>
+    <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_12">Descompactando o body do request do gzip</button>
+    <div id="e_12" class="collapse">
+<pre><code>
+var decompressed = $gzip.decompress( $call.request.getBody().getBytes() );
+var json = JSON.parse(decompressed);
+json.test = 2;
+$call.request.getBody().setString( JSON.stringify(json) , "utf-8" );
+</code></pre>
+    </div>
+</div>
+
+<br/>
+<div>
+    <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_13">Obtendo dados da app</button>
+    <div id="e_13" class="collapse">
+<pre><code>
+var extraInfo = $call.app.extraInfo;
+body.client_id = extraInfo.get("client_id");
+body.client_secret = extraInfo.get("client_secret");
+</code></pre>
+    </div>
+</div>
+
+<br/>
+<div>
+    <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_14">Remover os campos null da resposta</button>
+    <div id="e_14" class="collapse">
+<pre><code>
+try{
+	function removeNulls(obj){
+	  var isArray = obj instanceof Array;
+	  for (var k in obj){
+		if (obj[k]===null) isArray ? obj.splice(k,1) : delete obj[k];
+		else if (typeof obj[k]=="object") removeNulls(obj[k]);
+	  }
+	}
+
+	var response = JSON.parse($call.response.getBody().getString("utf-8"));
+	removeNulls(response);
+
+	$call.tracer.trace(JSON.stringify(response));
+	$call.response.getBody().setString(JSON.stringify(response), "utf-8");
+} catch (e) {
+  $call.tracer.trace(e);
+}
+</code></pre>
+    </div>
+</div>
+
+<br/>
+<div>
+    <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_15">Alterando o nome dos campos de resposta</button>
+    <div id="e_15" class="collapse">
+<pre><code>
+
+var dePara = {
+  	"nr_proposta": "numeroProposta",
+    "VALOR_X": "valorX"
+}
+var newJson = function (v, response) {
+	for (var k in v) {
+		response = response.replace('"' + k + '"', '"' + dePara[k] + '"');
+	}
+	return response;
+};
+
+var json = $call.response.getBody().getString("utf-8");
+$call.response.getBody().setString(newJson(dePara, json), "utf-8");
+</code></pre>
+    </div>
+</div>
+
+<br/>
+<div>
+    <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_16">Logando dados</button>
+    <div id="e_16" class="collapse">
+<pre><code>
+var objeto = {
+  	"nr_proposta": "numeroProposta",
+    "VALOR_X": "valorX"
+}
+
+$call.tracer.trace(JSON.stringify(objeto));
+</code></pre>
+    </div>
+</div>
+
+<br/>
+<div>
+    <button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#e_17">Salvar dados no extra info de um access token</button>
+    <div id="e_17" class="collapse">
+<pre><code>
+
+    var json = {};
+		response = JSON.parse(response.responseText);
+
+		json.grant_type = body.grant_type;
+		json.extraInfo = {"nome" : "Joao", "idUsuario": "1"};
+
+		$call.request.getBody().setString(JSON.stringify(json), "utf-8");
+</code></pre>
+    </div>
+</div>
+
+</div>

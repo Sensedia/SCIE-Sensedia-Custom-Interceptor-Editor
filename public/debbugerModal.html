@@ -1,0 +1,38 @@
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog" ng-controller="DebuggerController">
+  <div class="modal-dialog" ng-init="load()">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Debugger Interceptor</h4>
+      </div>
+      <div class="modal-body"><pre><code>
+try{
+    var body = JSON.parse($call.request.getBody().getString("utf-8"));
+
+    var data = {};
+    data.body = body;
+
+    data.queryParams = $call.request.getAllQueryParams();
+    data.pathParam = $call.pathParam;
+    data.url = $call.request.requestedUrl;
+    data.callerAddress = $call.request.receivedFromAddress;
+    if($call.accessToken){
+      data.accessTokenOwner = $call.accessToken.owner;
+      data.accessTokenCode = $call.accessToken.code;
+    }
+    data.receivedTimeMillis = $call.request.receivedTimeMillis;
+    data.debuggerOperation = "debugger_{{debuggerId}}";
+    $http.post("{{url}}", {}, body);
+}catch(e){
+  $call.tracer.trace(e);
+}
+      </code></pre></div>
+      <div class="modal-footer">
+      </div>
+    </div>
+
+  </div>
+</div>

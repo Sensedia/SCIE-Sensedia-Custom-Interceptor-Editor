@@ -1,0 +1,45 @@
+{
+  "name": "SCIE",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "main": "app.js",
+    "scripts": {
+     "start": "node app.js"
+  },
+  "dependencies": {
+    "angular-socket-io": "^0.7.0",
+    "body-parser": "~1.0.0",
+    "compression": "^1.6.2",
+    "cookie-parser": "^1.4.3",
+    "debug": "^2.6.0",
+    "ejs": "~1.0.0",
+    "express": "4.x",
+    "express-session": "^1.13.0",
+    "http-proxy-middleware": "^0.17.2",
+    "method-override": "~2.2.0",
+    "morgan": "latest",
+    "multer": "~0.1.6",
+    "ng-toast": "^2.0.0",
+    "nodejs-websocket": "^1.7.1",
+    "request": "^2.72.0",
+    "socket.io": "^1.7.2",
+    "uuid": "^2.0.1",
+    "websocket": "^1.0.24"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "devDependencies": {
+    "grunt-deploy": "^0.1.7",
+    "grunt": "~0.4.2",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.0",
+    "grunt-ng-annotate": "^1.0.1",
+    "grunt-usemin": "^3.1.1"
+  }
+}
